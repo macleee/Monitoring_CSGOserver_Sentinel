@@ -1,0 +1,165 @@
+{
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workbookDisplayName": {
+      "type": "string",
+      "defaultValue": "CSGO Server statisctics",
+      "metadata": {
+        "description": "The friendly name for the workbook that is used in the Gallery or Saved List.  This name must be unique within a resource group."
+      }
+    },
+    "workbookType": {
+      "type": "string",
+      "defaultValue": "sentinel",
+      "metadata": {
+        "description": "The gallery that the workbook will been shown under. Supported values include workbook, tsg, etc. Usually, this is 'workbook'"
+      }
+    },
+    "workbookSourceId": {
+      "type": "string",
+      "defaultValue": "/subscriptions/ef8cae2f-865f-4cb2-b099-9462dd7e6915/resourcegroups/rg-sentinel-swecent/providers/microsoft.operationalinsights/workspaces/law-sentinel-swecent",
+      "metadata": {
+        "description": "The id of resource instance to which the workbook will be associated"
+      }
+    },
+    "workbookId": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "The unique guid for this workbook instance"
+      }
+    }
+  },
+  "variables": {
+    "workbookContent": {
+      "version": "Notebook/1.0",
+      "items": [
+        {
+          "type": 1,
+          "content": {
+            "json": "# Overview of your CSGO server\n---\n\n**Here you can see what is happening on the server.**\n\nDiagrams shows you how many kills each player has and how many of them are headshots."
+          },
+          "name": "text - 2"
+        },
+        {
+          "type": 1,
+          "content": {
+            "json": "## Number of kills of each player"
+          },
+          "name": "text - 4"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "ParsedDataV3\n| where TimeGenerated >= ago(7d)\n| where Action contains \"killed\"\n| summarize count() by Username, SteamID\n| project-rename Kills = count_\n| render columnchart",
+            "size": 2,
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          "name": "query - 2"
+        },
+        {
+          "type": 1,
+          "content": {
+            "json": "## Players that have kills with headshots"
+          },
+          "name": "text - 3"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "ParsedDataV3\r\n| where TimeGenerated >= ago(7d)\r\n| where Action contains \"killed\" and Action contains \"(headshot)\"\r\n| summarize count() by Username, SteamID\r\n| project-rename Headshots = count_",
+            "size": 0,
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "Username",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Headshots",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            },
+            "graphSettings": {
+              "type": 0,
+              "topContent": {
+                "columnMatch": "Username",
+                "formatter": 1
+              },
+              "centerContent": {
+                "columnMatch": "Headshots",
+                "formatter": 1,
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            },
+            "mapSettings": {
+              "locInfo": "LatLong",
+              "sizeSettings": "Headshots",
+              "sizeAggregation": "Sum",
+              "legendMetric": "Headshots",
+              "legendAggregation": "Sum",
+              "itemColorSettings": {
+                "type": "heatmap",
+                "colorAggregation": "Sum",
+                "nodeColorField": "Headshots",
+                "heatmapPalette": "greenRed"
+              }
+            }
+          },
+          "name": "query - 2"
+        }
+      ],
+      "isLocked": false,
+      "fallbackResourceIds": [
+        "/subscriptions/ef8cae2f-865f-4cb2-b099-9462dd7e6915/resourcegroups/rg-sentinel-swecent/providers/microsoft.operationalinsights/workspaces/law-sentinel-swecent"
+      ],
+      "fromTemplateId": "sentinel-UserWorkbook"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('workbookId')]",
+      "type": "microsoft.insights/workbooks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2021-03-08",
+      "dependsOn": [],
+      "kind": "shared",
+      "properties": {
+        "displayName": "[parameters('workbookDisplayName')]",
+        "serializedData": "[string(variables('workbookContent'))]",
+        "version": "1.0",
+        "sourceId": "[parameters('workbookSourceId')]",
+        "category": "[parameters('workbookType')]"
+      }
+    }
+  ],
+  "outputs": {
+    "workbookId": {
+      "type": "string",
+      "value": "[resourceId( 'microsoft.insights/workbooks', parameters('workbookId'))]"
+    }
+  },
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+}
