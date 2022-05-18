@@ -18,7 +18,7 @@
                 "description": "This query looks, if there are trash talk on the server",
                 "severity": "Medium",
                 "enabled": true,
-                "query": "let badwords = dynamic (['shit', 'lol', 'hate', 'i hate you', 'suck', 'bad']);\r\nParsedDataV3\r\n| where TimeGenerated >= ago(7d)\r\n| where RawData contains \"say\"\r\n| where RawData has_any(badwords)",
+                "query": "let badwords = dynamic (['shit', 'lol', 'hate', 'ez', 'i hate you', 'suck', 'bad']);\r\nParsedDataV3\r\n| where TimeGenerated >= ago(7d)\r\n| where RawData contains \"say\"\r\n| where RawData has_any(badwords)",
                 "queryFrequency": "PT5M",
                 "queryPeriod": "PT5H",
                 "triggerOperator": "GreaterThan",
