@@ -1,5 +1,5 @@
-# Monitoring_CSGOserver_Sentinel
-This project is part of Sentinel Hackathon 2022. The aim of the project was to monitor CSGO server with Sentinel to detect possible hackers on the server.
+# Monitoring CSGOserver with Microsoft Sentinel
+This project is part of Sentinel Hackathon 2022. The aim of the project was to monitor CSGO server with Microsoft Sentinel to detect possible hackers on the server.
 
 ## Inspiration
 We both like playing Counter-Strike: Global Offensive (CS:GO), which lead us to the question: Would it be possible to use Microsoft Sentinel to monitor CS:GO server logs?
@@ -19,5 +19,5 @@ We proved that Sentinel can be used to monitor a CS:GO server without any 3rd pa
 ## What we learned
 We learned that Sentinel is a flexible tool for log monitoring, even with custom data connectors. We got better at parsing data with KQL by using regex and different operators and learned a thing or two about Sentinel rules.
 
-## What's next for Monitoring CSGO Server with Sentinel
-The next steps would be to make the rules that we added smarter. The current rules mainly serve as an example of how the log data can be used in Sentinel, and they could be vastly improved.
+## What's next for Monitoring CSGO Server with Microsoft Sentinel
+The next steps would be to improve the analytics rules. The current rules mainly serve as an example of how the log data can be used in Microsoft Sentinel, and they could be vastly improved.
